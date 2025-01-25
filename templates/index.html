@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NYCombinator</title>
+    <link rel="stylesheet" href="/static/colors.css">
+    <link rel="stylesheet" href="/static/header.css">
+    <link rel="stylesheet" href="/static/about-styles.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const aboutLink = document.querySelector('a[href="#about-project"]');
+    const ourDataLink = document.querySelector('a[href="#our-data"]');
+    const teamLink = document.querySelector('a[href="#about-team"]');
+
+    aboutLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        scrollToSection('#about-project', 1000);
+    });
+
+    ourDataLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        scrollToSection('#our-data', 1000);
+    });
+
+    teamLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        scrollToSection('#about-team', 1000);
+    });
+
+    function scrollToSection(selector, duration) {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+});
+    </script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="blue-header">
+        <div class="logo">NYCombinator</div>
+        <div class="nav">
+            <a href="#about-project">About</a>
+            <a href="#our-data">Our Data</a>
+            <a href="#about-team">Our Team</a>
+        </div>
+    </header>
+
+       <!-- Main Content -->
+        <div class="hero-image">
+        </div>
+        <div class="go-to-chat-button ">
+        <a href="/assistant" class="go-to-chat-button">Go to NYCombinator AI Assistant</a>
+        </div>
+
+    <!-- About Project Section -->
+   <div id="about-project">
+    <h1>About the Project</h1>
+    <p>
+        NYCombinator is a web application that helps people start and grow their businesses in New York City.
+        It is a platform that allows users to research their business ideas, add tasks, and receive feedback from a chatbot.
+        The chatbot will help users with their business ideas and provide them with resources to help them grow their business.
+    </p>
+    <div class="grid-container">
+        <div class="grid-item">
+            <p><strong>Over 60% of first-time entrepreneurs in NYC</strong> feel unprepared to tackle business planning and management challenges.</p>
+        </div>
+        <div class="grid-item">
+            <p>NYC is known for its intricate licensing, zoning, and compliance requirements. Opening a restaurant in NYC requires <strong>up to 15 permits and licenses</strong> from multiple city departments.</p>
+        </div>
+        <div class="grid-item">
+            <p>Entrepreneurs face significant financial hurdles due to NYC's high costs of living, rent, and labor. The average <strong>cost of starting a small business in NYC is $50,000–$75,000</strong>.</p>
+        </div>
+        <div class="grid-item">
+            <p><strong>20% of new businesses fail in the first year, and 50% fail within five years.</strong> A lack of proper guidance and resources is a leading cause.</p>
+        </div>
+        <div class="grid-item">
+            <p><strong>Around 72% of entrepreneurs prefer self-service digital tools</strong> and online platforms for research, networking, and task management over traditional in-person workshops.</p>
+        </div>
+        <div class="grid-item">
+            <p>New York City enforces <strong>over 6,000 rules and regulations</strong>, along with approximately <strong>250 business-related licenses and permits.</strong> Navigating this complex regulatory environment can be daunting for new business owners.</p>
+        </div>
+    </div>
+</div>
+<!-- Our Data Section -->
+<div id="our-data">
+    <h1>Our Data</h1>
+    <p>Our AI agent is the ultimate tool for NYC small business owners and entrepreneurs, blending the best of both worlds—unstructured and structured data—to deliver actionable insights and real-time solutions. From expert guidance on business rights, financing, and legal compliance to curated resources like permitting details, small business directories, and certification links, we've got every angle covered. Whether you're navigating regulations or seeking inspiration from startup success stories...</p>
+    <p><strong>NYCombinator is your go-to partner for growing and thriving in the dynamic NYC business landscape.</strong></p>
+    <div class="grid-container">
+        <div class="grid-section">
+            <div class="grid-item">
+                <h2>Structured Data</h2>
+                <ul>
+                    <li>Spreadsheet of all NYC business certifications, URLs to resources, and descriptions</li>
+                    <li>Spreadsheet of 11,000+ small businesses in New York City</li>
+                    <li>Spreadsheets of 100,000+ business license applications in New York City</li>
+                </ul>
+            </div>
+        </div>
+        <div class="grid-section">
+            <div class="grid-item">
+                <h2>Unstructured Data</h2>
+                <ul>
+                    <li>1,000+ pages of unstructured data</li>
+                    <li>Regulatory information from New York State and NYC</li>
+                    <li>Startup resources (e.g. YCombinator Startup School, Columbia Business School resources)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- About Team Section -->
+    <div id="about-team">
+        <h1>About Our Team</h1>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+            <div style="text-align: center; border: 1px solid #ccc; padding: 15px; border-radius: 10px;background-color: #e5F3FD; font-family: Arial, sans-serif;box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);">
+                <div style="width: 100px; height: 100px; background-image: url('static/img/anika.jpeg'); background-size: cover; margin: 0 auto; border-radius: 50%;"></div>
+                <h3>Anika Bull</h3>
+                <p>
+                    From launching oncology drugs to scaling impactful global health programs, I am driven by the opportunity for technology and science to improve patient outcomes.
+                    I am passionate about building and investing in digital health and AI applications that accelerate R&D, reduce time to market, streamline care delivery, and improve healthcare effectiveness.
+                </p>
+                <div class="grid-item">
+                <a href="https://www.linkedin.com/in/anika-bull-b33986140/" target="_blank">
+                    <img src="static/img/linkedin.png" alt="LinkedIn Logo" style="width: 30px; height: 30px;">
+                </a>
+            </p>
+        </div>
+            </div>
+            <div style="text-align: center; border: 1px solid #ccc; padding: 15px; border-radius: 10px;background-color: #e5F3FD; font-family: Arial, sans-serif;box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);">
+    <div style="width: 100px; height: 100px; background-image: url('static/img/fred.jpeg'); background-size: cover; margin: 0 auto; border-radius: 50%;"></div>
+                <h3>Fred Kim</h3>
+                <p>
+                    I am a passionate professional with over seven years of experience spanning diverse industries, all fueled by my unwavering commitment to fostering equity and justice in society and driving economic and technological progress.
+                </p>
+                <div class="grid-item">
+                <a href="https://www.linkedin.com/in/fred-kyungjun-kim/" target="_blank">
+                    <img src="static/img/linkedin.png" alt="LinkedIn Logo" style="width: 30px; height: 30px;">
+                </a>
+            </p>
+        </div>
+            </div>
+            <div style="text-align: center; border: 1px solid #ccc; padding: 15px; border-radius: 10px;background-color: #e5F3FD; font-family: Arial, sans-serif;box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);">
+                <div style="width: 100px; height: 100px; background-image:  url('static/img/joe.jpeg'); background-size: cover; margin: 0 auto; border-radius: 50%;"></div>
+                <h3>Joe Mozden</h3>
+                <p>
+                    I am an MBA Student at Columbia Business School, class of 2026. Previously, I was a senior consultant at Deloitte Consulting, specializing in technology strategy in Deloitte's banking and capital markets practice.
+                </p>
+                <div class="grid-item">
+                <a href="https://www.linkedin.com/in/joe-mozden/" target="_blank">
+                    <img src="static/img/linkedin.png" alt="LinkedIn Logo" style="width: 30px; height: 30px;">
+                </a>
+            </p>
+        </div>
+            </div>
+            <div style="text-align: center; border: 1px solid #ccc; padding: 15px; border-radius: 10px;background-color:#e5F3FD; font-family: Arial, sans-serif;box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);">
+                <div style="width: 100px; height: 100px; background-image: url('static/img/liv.jpeg');  background-size: cover; margin: 0 auto; border-radius: 50%;"></div>
+                <h3>Liv Erickson</h3>
+                <p>
+                    Liv is a senior product and strategic leader with extensive experience working within cross-functional, collaborative teams on emerging technologies, including AI/ML projects and spatial computing applications.
+                </p>
+                <div class="grid-item">
+                <a href="https://www.linkedin.com/in/liv-erickson/" target="_blank">
+                    <img src="static/img/linkedin.png" alt="LinkedIn Logo" style="width: 30px; height: 30px;">
+                </a>
+            </p>
+        </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+</html>

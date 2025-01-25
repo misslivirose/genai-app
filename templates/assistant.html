@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYCombinator</title>
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="/static/colors.css">
+    <link rel="stylesheet" href="/static/header.css">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<!-- Header Section -->
+<header class="blue-header">
+    <div class="logo">NYCombinator</div>
+    <div class="nav">
+        <a href="/">About</a>
+    </div>
+</header>
+
+<div class="container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+        <div class="app-header">
+            <a href="https://accepted.com/">
+                <video autoplay loop id='ad' src="static/ad-roll.mp4"/>
+            </a>
+            <br>
+        </div>
+        <!-- Checklist Section -->
+        <h2>Checklist</h2>
+        <div class="checklist-toggle">
+            <label for="enable-autotasks">Enable AI-generated tasks:</label>
+            <input id="enable-autotasks" type="checkbox" checked>
+        </div>
+        <div class="checklist-container">
+            <input id="checklist-input" type="input" placeholder="Add a new task..."/>
+            <button id="add-task-button">Add Task</button>
+            <ul id="checklist"></ul>
+        </div>
+        <h2>Links</h2>
+        <div class="link-container">
+            <ul id="link-list">
+
+            </ul>
+        </div>
+        <div class="download-pdf-button">
+            <button id="download-pdf-button"> Download PDF</button>
+        </div>
+
+        <script>
+
+        </script>
+
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+        <h3>
+            <button id="toggle-business-details" class="collapsible-button">[-]</button>
+            Business Details
+        </h3>
+        <div class="business-details-section" id="business-details-section">
+
+            <label for="business-name">Company Name:</label>
+            <input type="text" id="business-name" placeholder="Enter name of the company"/>
+
+            <label for="business-type">Type of Business:</label>
+            <input type="text" maxlength = 250 id="business-type" placeholder="e.g. Tech, Retail, etc."/>
+
+            <label for="business-description">Description:</label>
+            <textarea id="business-description" placeholder="Provide a brief description of the business"></textarea>
+
+            <button id="update-business-button">Update Business Details</button>
+        </div>
+        <div class="chat-header">
+            NY Combinator Chat
+        </div>
+        <div class="chat-window" id="chat-window">
+            <!-- Chat messages will go here -->
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Type your message..."/>
+            <button id="send-button">Send</button>
+        </div>
+        <div class="suggestions-container">
+            <button class="suggestion-button">How do I start a company in NYC?</button>
+            <button class="suggestion-button">Why is NYC a great place to run a company?</button>
+            <button class="suggestion-button">How do you get an EIN?</button>
+            <button class="suggestion-button">What makes businesses fail?</button>
+        </div>
+    </div>
+</div>
+<script>
+
+    // Constants for layout and alignment
+    const USER_TEXT_ALIGN = "right";
+    const AI_TEXT_ALIGN = "left";
+    const MESSAGE_MARGIN = "10px";
+
+    // Assume these are pre-defined elements in the HTML
+    const chatWindow = document.getElementById('chat-window'); // Chat window div
+    const chatInput = document.getElementById('chat-input'); // Chat input box
+    const sendButton = document.getElementById('send-button'); // Send button
+    const suggestionButtons = document.querySelectorAll('.suggestion-button'); // Suggestion buttons
+
+    // Function to handle adding links to the link-list
+    function addLinks(urls) {
+        console.log("Valid links found:", urls);
+        const linkContainer = document.getElementById('link-list'); // Get the link-list container
+
+        // Check if URLs are provided
+        if (!urls || urls.length === 0) {
+            return;
+        }
+
+        // Iterate through the URL list and add each URL as a list item
+        urls.forEach((url) => {
+            const listItem = document.createElement('li');
+            const linkElement = document.createElement('a');
+            linkElement.href = url; // Set the hyperlink
+            linkElement.textContent = url; // Display the URL text
+            linkElement.target = "_blank"; // Open the link in a new tab
+
+            listItem.appendChild(linkElement); // Add the link to the list item
+            linkContainer.appendChild(listItem); // Add the list item to the container
+        });
+    }
+
+    // Reusable function to handle sending the user input
+    function sendUserInput(userInput) {
+        if (userInput.trim()) {
+            // Append user's message to the chat
+            createChatMessage(`You: ${userInput}`, USER_TEXT_ALIGN);
+
+            // Append typing animation
+            createChatMessage(`AI is typing<span class="dots"></span>`, AI_TEXT_ALIGN, true);
+
+            // Simulate AI typing delay and fetch the AI response
+            setTimeout(async () => {
+                const aiResponse = await fetchAIResponse(userInput);
+                const reply = aiResponse.reply;
+                const suggestions = aiResponse.recommendations;
+                const tasks = aiResponse.tasks;
+                const urls = aiResponse.links;
+
+                // Remove the typing animation
+                const typingMessage = chatWindow.querySelector('.dots');
+                if (typingMessage) typingMessage.parentElement.remove();
+
+                // Add the actual AI response
+                createChatMessage(`🤖 ${reply}`, AI_TEXT_ALIGN, true);
+                updateSuggestions(suggestions);
+                updateTasks(tasks)
+                addLinks(urls)
+
+                // Scroll to the latest message
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }, 2000); // 2-second delay to simulate typing
+        }
+    }
+
+    // Send button click event handler
+    sendButton.addEventListener('click', () => {
+        const userInput = chatInput.value.trim();
+
+        if (userInput) {
+            sendUserInput(userInput); // Call the reusable function
+            chatInput.value = ''; // Clear the input field
+        }
+    });
+
+    // Suggestion button click event handlers
+    suggestionButtons.forEach((button) => {
+        button.addEventListener('click', (event) => {
+            const suggestionText = event.target.textContent;
+            sendUserInput(suggestionText); // Call the reusable function
+        });
+    });
+
+    // Helper function to create a chat message (for both user and AI)
+    function createChatMessage(content, textAlign, isAIResponse = false) {
+        const message = document.createElement('div');
+        message.style.margin = MESSAGE_MARGIN; // Apply basic styling
+        message.style.textAlign = textAlign; // Align left (AI) or right (user)
+
+        if (isAIResponse) {
+            message.classList.add('ai-response'); // Add specific class for AI formatting
+        } else {
+            message.classList.add('user-message'); // Add class for user messages
+        }
+        message.innerHTML = content.replace(/\n/g, '<br>');
+        chatWindow.appendChild(message);
+    }
+
+    async function fetchAIResponse(userInput) {
+        try {
+            console.log('Sending user input to /chat:', userInput); // Log input
+
+            // Retrieve business details from localStorage
+            const savedBusinessDetails = JSON.parse(localStorage.getItem('businessDetails')) || {
+                name: '',
+                type: '',
+                description: ''
+            };
+
+            // Construct the payload for the AI request
+            const payload = {
+                message: userInput,
+                businessDetails: {
+                    name: savedBusinessDetails.name || 'Unknown',
+                    type: savedBusinessDetails.type || 'N/A',
+                    description: savedBusinessDetails.description || 'No description provided.'
+                }
+            };
+
+            console.log('Payload being sent to the server:', payload); // Log payload for debugging
+
+            // Send the data to the server
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            console.log('Response status:', response.status); // Log status for debugging
+
+            if (!response.ok) {
+                const errorDetails = await response.text(); // Extract error details if available
+                throw new Error(`Failed to communicate with AI: ${errorDetails}`);
+            }
+
+            // Parse the response as JSON
+            const data = await response.json();
+            console.log('AI response data:', data); // Log response data for debugging
+            return data; // Assumes the API responds with { reply: "AI's response" }
+        } catch (error) {
+            console.error('Error fetching AI response:', error.message); // Log the error message
+            return {reply: 'Oops! Something went wrong.'}; // Default error message
+        }
+    }
+
+    function updateSuggestions(suggestions) {
+        if (suggestions && Array.isArray(suggestions)) {
+            console.log("Valid Recommendations Found:", suggestions);
+
+            // Select the container for suggestion buttons
+            const suggestionContainer = document.querySelector('.suggestions-container');
+
+            // Clear existing suggestion buttons to avoid duplicates
+            suggestionContainer.innerHTML = "";
+
+            // Add new buttons based on suggestions
+            suggestions.forEach((suggestion) => {
+                const button = document.createElement("button");
+                button.textContent = suggestion.slice(2).replaceAll('"', ""); // Remove leading "•"
+                button.classList.add("suggestion-button");
+                button.addEventListener("click", () => sendUserInput(suggestion.slice(2).replaceAll('"', ""))) // Add single click handler
+                suggestionContainer.appendChild(button);
+            });
+        } else {
+            console.error("Recommendations not found or invalid in AI response:", suggestions);
+        }
+    }
+
+    function updateTasks(tasks) {
+        const autoTaskToggle = document.getElementById('enable-autotasks');
+        if (autoTaskToggle.checked) {
+            if (tasks && Array.isArray(tasks)) {
+                console.log("Valid Tasks Found:", tasks);
+                tasks.forEach((task) => {
+                    const checklist = document.getElementById('checklist');
+                    const listItem = document.createElement('li');
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'task-checkbox';
+                    checkbox.id = `task-${Date.now()}`;
+
+                    // Create a trash button element
+                    const trashButton = document.createElement('button');
+                    trashButton.className = 'trash-button';
+
+                    // Add the trash icon as an image inside the button
+                    const trashIcon = document.createElement('img');
+                    trashIcon.src = 'static/img/delete.png';
+                    trashIcon.alt = 'Delete Task';
+                    trashIcon.className = 'trash-icon';
+                    trashButton.appendChild(trashIcon);
+
+                    // Click event to remove the task
+                    trashButton.addEventListener('click', () => {
+                        listItem.remove();
+                    });
+
+                    const taskLabel = document.createElement('label');
+                    taskLabel.className = 'task-label';
+                    taskLabel.textContent = task.slice(2).replaceAll('"', "");
+                    taskLabel.setAttribute('for', checkbox.id);
+
+                    checkbox.addEventListener('change', () => {
+                        if (checkbox.checked) {
+                            listItem.classList.add('completed');
+                            checklist.appendChild(listItem);
+                        } else {
+                            listItem.classList.remove('completed');
+                            checklist.prepend(listItem);
+                        }
+                    });
+
+                    listItem.prepend(taskLabel);
+                    listItem.prepend(checkbox);
+                    listItem.appendChild(trashButton);
+                    checklist.prepend(listItem);
+
+                });
+            } else {
+                console.error("Tasks not found or invalid:", tasks);
+            }
+        }
+    }
+
+    // TODO: ADD DOWNLOAD
+    document.addEventListener('DOMContentLoaded', () => {
+        const downloadPdfButton = document.getElementById('download-pdf-button');
+
+        downloadPdfButton.addEventListener('click', () => {
+            const {jsPDF} = window.jspdf;
+            const doc = new jsPDF();
+
+            // Collect information from the page
+            const businessName = document.getElementById('business-name').value.trim();
+            const businessType = document.getElementById('business-type').value.trim();
+            const businessDescription = document.getElementById('business-description').value.trim();
+            const checklistItems = Array.from(document.querySelectorAll('#checklist li')).map((li) => {
+                const checkbox = li.querySelector('input');
+                return `${checkbox.checked ? '[x]' : '[ ]'} ${li.querySelector('label').textContent}`;
+            });
+            const urls = Array.from(document.querySelectorAll('#link-list li')).map((li) => {
+                const linkElement = li.querySelector('a'); // Target the anchor (link) element within each <li>
+                return linkElement ? linkElement.href : null; // Get the href attribute of the anchor, or null if not present
+            }).filter((url) => url !== null); // Filter out any undefined or null values
+
+            const chatMessages = Array.from(document.getElementById('chat-window').children).map((message) => message.textContent);
+
+            // Add content to the PDF
+            doc.setFontSize(16);
+            doc.text('NY Combinator - Exported Details', 10, 10);
+
+            doc.setFontSize(12);
+
+            // Bold 'Company Name'
+            doc.setFont("helvetica", "bold");
+            doc.text("Company Name:", 10, 20);
+            doc.setFont("helvetica", "normal");
+            doc.text(`${businessName || 'Not Provided'}`, 50, 20);
+
+            // Bold 'Type of Business'
+            doc.setFont("helvetica", "bold");
+            doc.text("Type of Business:", 10, 30);
+            doc.setFont("helvetica", "normal");
+            doc.text(`${businessType || 'Not Provided'}`, 50, 30);
+
+            // Bold 'Description'
+            doc.setFont("helvetica", "bold");
+            doc.text("Description:", 10, 40);
+            doc.setFont("helvetica", "normal");
+            doc.text(`${businessDescription || 'Not Provided'}`, 50, 40, {maxWidth: 150});
+
+            doc.setFont("helvetica", "bold");
+            doc.text('Checklist:', 10, 130);
+            doc.setFont("helvetica", "normal");
+            checklistItems.forEach((item, index) => {
+                doc.text(item, 10, 140 + index * 10,  {maxWidth: 150});
+            });
+
+            doc.setFont("helvetica", "bold");
+            doc.text('Links:', 10, 190);
+            doc.setFont("helvetica", "normal");
+            urls.forEach((link, index) => {
+                doc.text(link, 10, 200 + index * 10);
+            });
+            // Save the PDF
+            doc.save('NYCombinator_Details.pdf');
+        });
+
+        // ---------------- Toggle Behavior ------------------------
+        const toggleButton = document.getElementById('toggle-business-details');
+        const businessDetailsContent = document.getElementById('business-details-section');
+
+        toggleButton.addEventListener('click', () => {
+            if (businessDetailsContent.classList.contains('hidden')) {
+                businessDetailsContent.classList.remove('hidden');
+                toggleButton.textContent = '[-]'; // Update button text to show collapse indicator
+            } else {
+                businessDetailsContent.classList.add('hidden');
+                toggleButton.textContent = '[+]'; // Update button text to show expand indicator
+            }
+        });
+
+        // ---------------- Checklist Initialization ----------------
+        const checklistInput = document.getElementById('checklist-input');
+        const addTaskButton = document.getElementById('add-task-button');
+        const checklist = document.getElementById('checklist');
+
+
+    function addTask(taskText) {
+        console.log('Adding task:', taskText);
+        if (taskText.trim()) {
+            const listItem = document.createElement('li');
+
+            // Create a trash button element
+            const trashButton = document.createElement('button');
+            trashButton.className = 'trash-button';
+
+            // Add the trash icon as an image inside the button
+            const trashIcon = document.createElement('img');
+            trashIcon.src = 'static/img/delete.png';
+            trashIcon.alt = 'Delete Task';
+            trashIcon.className = 'trash-icon';
+            trashButton.appendChild(trashIcon);
+
+            // Click event to remove the task
+            trashButton.addEventListener('click', () => {
+                listItem.remove();
+            });
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'task-checkbox';
+            checkbox.id = `task-${Date.now()}`;
+
+            const taskLabel = document.createElement('label');
+            taskLabel.className = 'task-label';
+            taskLabel.textContent = taskText;
+            taskLabel.setAttribute('for', checkbox.id);
+
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    listItem.classList.add('completed');
+                    checklist.appendChild(listItem);
+                } else {
+                    listItem.classList.remove('completed');
+                    checklist.prepend(listItem);
+                }
+            });
+            // Add the button to the list item
+            listItem.prepend(taskLabel);
+            listItem.prepend(checkbox);
+            listItem.appendChild(trashButton);
+            checklist.prepend(listItem);
+        }
+    }
+
+    addTaskButton.addEventListener('click', () => {
+        const taskText = checklistInput.value.trim();
+        if (taskText) {
+            addTask(taskText);
+            checklistInput.value = '';
+        }
+    });
+
+    checklistInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            const taskText = checklistInput.value.trim();
+            if (taskText) {
+                addTask(taskText);
+                checklistInput.value = '';
+            }
+        }
+    });
+
+     // ---------------- Business Details Initialization ----------------
+    const businessNameInput = document.getElementById('business-name');
+    const businessTypeInput = document.getElementById('business-type');
+    const businessDescriptionInput = document.getElementById('business-description');
+    const updateBusinessButton = document.getElementById('update-business-button');
+
+    // Function to load existing business details from local storage
+    function loadBusinessDetails() {
+        const savedBusinessDetails = JSON.parse(localStorage.getItem('businessDetails'));
+        if (savedBusinessDetails) {
+            businessNameInput.value = savedBusinessDetails.name || '';
+            businessTypeInput.value = savedBusinessDetails.type || '';
+            businessDescriptionInput.value = savedBusinessDetails.description || '';
+        }
+    }
+
+    // Function to save business details to local storage
+    function saveBusinessDetails() {
+        const businessDetails = {
+            name: businessNameInput.value.trim(),
+            type: businessTypeInput.value.trim(),
+            description: businessDescriptionInput.value.trim(),
+        };
+
+        localStorage.setItem('businessDetails', JSON.stringify(businessDetails));
+        alert('Business details updated successfully!');
+    }
+
+    // Event listener for update button
+    updateBusinessButton.addEventListener('click', saveBusinessDetails);
+    // Load business details on page load
+    loadBusinessDetails();
+
+    });
+
+
+
+</script>
+<script src="/static/scripts/checklist.js"></script>
+</body>
+</html>

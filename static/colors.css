@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+/* Define the app colors */
+:root {
+    --primary-color: #58B9E2; /* Light blue */
+    --primary-hover-color: #145C8C; /* Dark blue */
+    --secondary-color: #f2f2f2; /* Light gray */
+    --background-color: #ffffff; /* White */
+    --border-color: #ccc; /* Light border gray */
+    --text-color: #333; /* Dark gray text */
+    --ai-response-bg: #f8f9fa; /* AI message background */
+    --ai-response-text: #212529; /* AI message text */
+    --user-message-border: #badbcc; /* User message border */
+
+    font-family: 'Inter', sans-serif;
+}
+
+input[type='checkbox'] {
+    accent-color: var(--primary-color);
+}
+
+input[type='checkbox'] ::after {
+    accent-color: var(--secondary-color);
+}

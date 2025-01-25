@@ -1,0 +1,38 @@
+.blue-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover-color));    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    position: fixed; /* Makes the header fixed at the top */
+    top: 0;
+    left: 0;
+    width: 100%; /* Ensure it spans the full width of the viewport */
+    z-index: 1000; /* Ensure it stays above other content */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav {
+    display: flex;
+    gap: 10px; /* Space between the navigation items */
+    align-items: center;
+    position: absolute;
+    right: 60px;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}

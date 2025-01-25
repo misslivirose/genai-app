@@ -1,0 +1,175 @@
+body {
+    margin: 0;
+    padding-top: 60px; /* Adjust this value to match the header's height */
+}
+
+.hero-image {
+    position: relative;
+    height: 60vh;
+    background-image: url('./img/nyc.jpeg');
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(100%) contrast(150%);
+    padding: 40px;
+}
+
+.go-to-chat-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--primary-color); /* Ensure this remains blue */
+    color: white;
+    font-weight: bold;
+    padding: 15px 30px; /* This padding ensures space around the text */
+    border: none;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    white-space: nowrap; /* Prevent text from wrapping */
+    text-align: center; /* Center text inside the button */
+    display: inline-block; /* Makes the button size itself dynamically */
+}
+
+.go-to-chat-button:hover {
+    background-color: var(--primary-hover-color);
+}
+
+#about-project {
+    padding: 60px 40px;
+    background-color: #f9f9f9; /* Very light grey background */
+    font-size: 18px; /* Standard font size */
+}
+
+#about-project .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 20px; /* Space between boxes */
+    margin-top: 30px;
+    padding: 20px 20px;
+}
+
+#about-project .grid-item {
+    background-color: white; /* White background for the box */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 20px; /* Space inside the box */
+    text-align: center; /* Center align text */
+    font-size: 16px; /* Standard font size */
+    line-height: 1.5; /* Improve readability */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover effects */
+}
+
+#about-project .grid-item strong {
+    color: var(--primary-color); /* Match the blue color of the chat button */
+    font-weight: bold; /* Ensure bold text */
+}
+
+#about-project .grid-item:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+#about-team {
+    padding: 60px 40px; /* Reduced padding to create buffer */
+}
+
+.team-member-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #e5F3FD;
+    font-family: Arial, sans-serif;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 300px; /* Limit the width of the cards */
+    margin: 0 auto; /* Center the cards */
+}
+
+.team-member-card .profile-image {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.grid-item a {
+    display: inline-block; /* Ensure the link and the image are inline */
+    margin-right: 10px; /* Space between the image and the text */
+}
+
+.grid-item img {
+    width: 30px; /* Adjust the size of the LinkedIn logo */
+    height: 30px; /* Adjust the size of the LinkedIn logo */
+    transition: transform 0.3s ease; /* Smooth scaling effect */
+}
+
+.grid-item img:hover {
+    transform: scale(1.1); /* Slight zoom effect when hovered */
+}
+
+#our-data {
+    padding: 60px 40px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 18px;
+}
+
+#our-data > h1 {
+    color: white;
+    text-align: left;
+    padding-left: 0px;
+}
+
+#our-data .grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+}
+
+#our-data .grid-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+#our-data .grid-section h2 {
+    color: black;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#our-data .grid-item {
+    background-color: #e5F3FD;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.5;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: black;
+}
+
+
+#our-data .grid-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+#our-data .grid-item strong {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+#our-data .grid-item ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+#our-data .grid-item li {
+    margin-bottom: 10px;
+}
