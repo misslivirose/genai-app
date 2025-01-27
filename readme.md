@@ -1,5 +1,8 @@
 # Hello, NYC!
 
+![image](https://github.com/user-attachments/assets/84d84797-dc86-4dc5-8e40-d0af9764525a)
+
+
 This repository contains the files for Team 2's Programming Generative AI course application. The application uses OpenAI, langchain, and FAISS to create a basic RAG chatbot designed to help you navigate the process of starting a new business in New York City. 
 
 ## Getting Started
